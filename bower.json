@@ -12,8 +12,8 @@
     "seed"
   ],
   "main": "fetch-element.html",
-  "license": "http://BasicElements.github.io/LICENSE.txt",
-  "homepage": "https://github.com/BasicElements/seed-element/",
+  "license": "http://VandeurenGlenn.github.io/LICENSE.txt",
+  "homepage": "https://github.com/VandeurenGlenn/fetch-element/",
   "ignore": [
     "/.*",
     "/test/",
