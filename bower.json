@@ -1,0 +1,29 @@
+{
+  "name": "fetch-element",
+  "version": "1.0.0",
+  "authors": [
+    "Glenn Vandeuren <VandeurenGlenn@gmail.com>"
+  ],
+  "description": "An element wrapping [Fetch](https://github.com/github/fetch).",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "seed"
+  ],
+  "main": "fetch-element.html",
+  "license": "http://BasicElements.github.io/LICENSE.txt",
+  "homepage": "https://github.com/BasicElements/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}
