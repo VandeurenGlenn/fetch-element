@@ -3,6 +3,14 @@
 Copyright (c) 2015 Glenn Vandeuren. All rights reserved.
 -->
 <link rel="import" href="../polymer/polymer.html">
+<script>
+  if (!Promise) {
+    document.write('<script src="../es6-promise/dist/es6-promise.js"><\\/script>');
+  }
+  if (!fetch) {
+    document.write('<script src="../fetch/fetch.js"><\\/script>');
+  }
+</script>
 
 <!--
 An element wrapping [Fetch](https://github.com/github/fetch).
