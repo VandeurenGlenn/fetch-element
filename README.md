@@ -4,7 +4,7 @@ An element wrapping the [Fetch](https://github.com/github/fetch) API.
 
 ## Elements using fetch-element
 
-* [imgur-image](https://github.com/basicelements/imgur-image) An element for getting images using the [Imgur API](https://api.imgur.com).
+* [imgur-image](https://github.com/basicelements/imgur-image) - An element for getting images using the [Imgur API](https://api.imgur.com).
 
 ## Info & Demo
 
