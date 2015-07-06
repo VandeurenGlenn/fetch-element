@@ -1,0 +1,92 @@
+<!--
+@license
+Copyright (c) 2015 Glenn Vandeuren. All rights reserved.
+-->
+<link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../fetch-element.html">
+<link rel="import" href="error-toast.html">
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+    <post-element></post-element>
+
+@demo
+-->
+<dom-module id="post-element">
+
+  <style>
+    :host {
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+
+  <template>
+
+    <p>Url</p>
+    <input type="text" value="{{demoUrl::input}}">
+
+    <p>Client-Id</p>
+    <input type="text" value="{{clientId::input}}">
+
+    <input id="fileInput" type="file"></input>
+
+    <a href="[[responseData.data.link]]">
+      <img src="[[responseData.data.link]]"></img>
+    </a>
+
+    <fetch-element
+      url="{{demoUrl}}"
+      method="post"
+      headers="{{_computeHeaders(clientId)}}"
+      data="{{responseData}}"
+      error="{{error}}"
+      auto>
+    </fetch-element>
+
+    <error-toast></error-toast>
+
+  </template>
+
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'post-element',
+
+    properties: {
+
+      demoUrl: {
+        type: String,
+        value: 'https://api.imgur.com/3/image'
+      },
+
+      clientId: {
+        type: String
+      }
+    },
+
+    observers: [
+      '_error(error)'
+    ],
+
+
+    ready: function () {
+      this.$.fileInput.addEventListener('change', function() {
+        var fetchEl = document.querySelector("fetch-element");
+        fetchEl.body = this.files[0];
+      });
+    },
+
+    _computeHeaders: function (clientId) {
+      return {"Authorization": "Client-ID " + clientId, "Content-type": "multipart/form-data"};
+    },
+
+    _error: function (err) {
+      this.querySelector('error-toast').error = err;
+    }
+
+  });
+</script>

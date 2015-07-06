@@ -1,0 +1,101 @@
+<!--
+@license
+Copyright (c) 2015 Glenn Vandeuren. All rights reserved.
+-->
+<link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../fetch-element.html">
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+    <error-toast></error-toast>
+
+@demo
+-->
+<dom-module id="error-toast">
+
+  <style>
+    :host {
+      position: fixed;
+      display: flex;
+      flex-direction: row;
+      align-content: center;
+      padding: 0.9em 1em;
+      bottom: 12px;
+      left: 12px;
+      opacity: 1;
+      background: #FF5252;
+      color: #f1f1f1;
+
+      -webkit-transition: display 0.3s, opacity cubic-bezier(0.37, 0.04, 0.57, 0.99) 0.2s 0.3s, -webkit-transform 0.3s;
+      transition: display 0.3s, opacity cubic-bezier(0.37, 0.04, 0.57, 0.99) 0.2s 0.3s, transform 0.3s;
+
+      -webkit-transform: translateY(0px);
+      transform: translateY(0px);
+    }
+
+    :host([hidden]) {
+      display: none;
+
+      -webkit-transform: translateY(100px);
+      transform: translateY(100px);
+    }
+  </style>
+
+  <template>
+    <span>{{error}}</span>
+  </template>
+
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'error-toast',
+
+    properties: {
+      error: {
+        type: Object,
+        observer: '_errorChanged'
+      },
+
+      /**
+       * The duration error-toast is shown.
+       *
+       * *in milliseconds*
+       */
+      duration: {
+        type: Number,
+        value: 3000
+      },
+
+      hidden: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: true
+      }
+    },
+
+    _errorChanged: function (e) {
+      if (e) {
+        this.show();
+        this.async(function () {
+          this.hide();
+        }, this.duration);
+      }
+    },
+
+    show: function () {
+      this.hidden = false;
+    },
+
+    hide: function () {
+      this.hidden = true;
+    },
+
+    toggle: function () {
+      this.hidden = !this.hidden;
+    }
+
+  });
+</script>

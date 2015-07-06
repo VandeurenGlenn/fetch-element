@@ -1,0 +1,140 @@
+<!--
+@license
+Copyright (c) 2015 Glenn Vandeuren. All rights reserved.
+-->
+<link rel="import" href="../polymer/polymer.html">
+<script>
+  if (!Promise) {
+    document.write('<script src="../es6-promise/dist/es6-promise.js"><\\/script>');
+  }
+  if (!fetch) {
+    document.write('<script src="../fetch/fetch.js"><\\/script>');
+  }
+</script>
+
+<!--
+An element wrapping [Fetch](https://github.com/github/fetch).
+
+Example:
+
+    <fetch-element></fetch-element>
+
+@demo
+-->
+
+<script>
+
+  Polymer({
+
+    is: 'fetch-element',
+
+    properties: {
+
+      url: {
+        type: String
+      },
+
+      headers: {
+        type: Object
+      },
+
+      /**
+      * Set method to post for writing data to JSON.
+      */
+      method: {
+        type: String
+      },
+
+      /**
+      * the object to add
+      */
+      body: {
+        type: Object,
+        value: undefined
+      },
+
+      type: {
+        type: String
+      },
+
+      data: {
+        type: Object,
+        notify: true
+      },
+
+      auto: {
+        type: Boolean,
+        reflectToAttribute: true
+      },
+
+      error: {
+        type: Object,
+        notify: true
+      },
+
+      log: {
+        type: Boolean,
+        value: false
+      }
+
+    },
+
+    observers: [
+      'fetch(body, headers, auto)'
+    ],
+
+    // Element Lifecycle
+
+    attached: function() {
+      if (this.method !== 'post' && this.auto) {
+        this.fetch();
+      }
+    },
+
+    // Element Behavior
+
+    fetch: function () {
+      this.params = {};
+      this.params.headers = this.headers;
+
+      if (this.method) {
+        this.params.method = this.method;
+        if (this.method === 'post') {
+          this.params.body = this.body;
+        }
+      }
+
+      fetch(this.url, this.params)
+        .then(this._status.bind(this))
+        .then(this._json.bind(this))
+        .then(this._responseData.bind(this))
+        .catch(this._errorHandler.bind(this));
+    },
+
+    _status: function (response) {
+      if (response.status >= 200 && response.status < 300) {
+        return Promise.resolve(response)
+      } else {
+        return Promise.reject(new Error(response.statusText))
+      }
+    },
+
+    _json: function (response) {
+      return response.json()
+    },
+
+    _responseData: function (data) {
+      return this.data = data;
+    },
+
+    _errorHandler: function(error) {
+      if (this.log) {
+        console.log('Request failed', error);
+      }
+      return this.error = error;;
+    }
+
+
+  });
+
+</script>
