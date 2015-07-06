@@ -1,6 +1,6 @@
 # fetch-element
 
-An element providing a starting point for the own reusable Polymer elements.
+An element wrapping the [Fetch](https://github.com/github/fetch) API.
 
 ## Elements using fetch-element
 
