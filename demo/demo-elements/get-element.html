@@ -4,6 +4,7 @@ Copyright (c) 2015 Glenn Vandeuren. All rights reserved.
 -->
 <link rel="import" href="../../../polymer/polymer.html">
 <link rel="import" href="../../fetch-element.html">
+<link rel="import" href="error-toast.html">
 <!--
 An element providing a solution to no problem in particular.
 
@@ -22,6 +23,7 @@ Example:
   </style>
 
   <template>
+
     <p>Url</p>
     <input type="text" value="{{demoUrl::input}}">
     <p>Client-Id</p>
@@ -39,6 +41,7 @@ Example:
       data="{{data}}" auto>
     </fetch-element>
 
+    <error-toast></error-toast>
   </template>
 
 </dom-module>
@@ -64,8 +67,10 @@ Example:
     },
 
     observers: [
-      '_dataChanged(data)'
+      '_dataChanged(data)',
+      '_error(error)'
     ],
+
 
     _computeUrl: function (url, dataId) {
       if (url && !dataId) {
@@ -85,6 +90,10 @@ Example:
       if (e) {
         this.data = e.data;
       }
+    },
+
+    _error: function (err) {
+      this.querySelector('error-toast').error = err;
     }
 
     // ready: function () {

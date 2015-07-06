@@ -4,6 +4,7 @@ Copyright (c) 2015 Glenn Vandeuren. All rights reserved.
 -->
 <link rel="import" href="../../../polymer/polymer.html">
 <link rel="import" href="../../fetch-element.html">
+<link rel="import" href="error-toast.html">
 <!--
 An element providing a solution to no problem in particular.
 
@@ -41,8 +42,11 @@ Example:
       method="post"
       headers="{{_computeHeaders(clientId)}}"
       data="{{responseData}}"
+      error="{{error}}"
       auto>
     </fetch-element>
+
+    <error-toast></error-toast>
 
   </template>
 
@@ -64,6 +68,10 @@ Example:
       }
     },
 
+    observers: [
+      '_error(error)'
+    ],
+
 
     ready: function () {
       this.$.fileInput.addEventListener('change', function() {
@@ -74,6 +82,10 @@ Example:
 
     _computeHeaders: function (clientId) {
       return {"Authorization": "Client-ID " + clientId, "Content-type": "multipart/form-data"};
+    },
+
+    _error: function (err) {
+      this.querySelector('error-toast').error = err;
     }
 
   });
