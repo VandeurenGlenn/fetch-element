@@ -6,6 +6,10 @@ An element providing a starting point for the own reusable Polymer elements.
 
 * [imgur-image](https://github.com/basicelements/imgur-image) An element for getting images using the [Imgur API](https://api.imgur.com).
 
+## Info & Demo
+
+Check the [component-page](https://vandeurenglenn.github.io/fetch-element/) for info & demo's.
+
 ## Dependencies
 
 Element dependencies are managed via [Bower](http://bower.io/). You can
