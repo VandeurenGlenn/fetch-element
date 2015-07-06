@@ -65,6 +65,16 @@ Example:
       auto: {
         type: Boolean,
         reflectToAttribute: true
+      },
+
+      error: {
+        type: Object,
+        notify: true
+      },
+
+      log: {
+        type: Boolean,
+        value: false
       }
 
     },
@@ -76,22 +86,6 @@ Example:
     // Element Lifecycle
 
     attached: function() {
-      this._status = function (response) {
-        if (response.status >= 200 && response.status < 300) {
-          return Promise.resolve(response)
-        } else {
-          return Promise.reject(new Error(response.statusText))
-        }
-      },
-
-      this._json = function (response) {
-        return response.json()
-      },
-
-      this._responseData = function (data) {
-        return this.data = data;;
-      }.bind(this);
-
       if (this.method !== 'post' && this.auto) {
         this.fetch();
       }
@@ -111,12 +105,33 @@ Example:
       }
 
       fetch(this.url, this.params)
-        .then(this._status)
-        .then(this._json)
-        .then(this._responseData)
-        .catch(function(error) {
-          console.log('Request failed', error)
-      }.bind(this));
+        .then(this._status.bind(this))
+        .then(this._json.bind(this))
+        .then(this._responseData.bind(this))
+        .catch(this._errorHandler.bind(this));
+    },
+
+    _status: function (response) {
+      if (response.status >= 200 && response.status < 300) {
+        return Promise.resolve(response)
+      } else {
+        return Promise.reject(new Error(response.statusText))
+      }
+    },
+
+    _json: function (response) {
+      return response.json()
+    },
+
+    _responseData: function (data) {
+      return this.data = data;
+    },
+
+    _errorHandler: function(error) {
+      if (this.log) {
+        console.log('Request failed', error);
+      }
+      return this.error = error;;
     }
 
 
