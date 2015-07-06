@@ -1,0 +1,95 @@
+<!--
+@license
+Copyright (c) 2015 Glenn Vandeuren. All rights reserved.
+-->
+<link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../fetch-element.html">
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+    <get-element></get-element>
+
+-->
+<dom-module id="get-element">
+
+  <style>
+    :host {
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+
+  <template>
+    <p>Url</p>
+    <input type="text" value="{{demoUrl::input}}">
+    <p>Client-Id</p>
+    <input type="text" value="{{clientId::input}}">
+    <p>Data id</p>
+    <input type="text" value="{{dataId::input}}">
+
+    <a href="[[data.link]]">
+      <img src="[[data.link]]"></img>
+    </a>
+
+    <fetch-element
+      url="{{_computeUrl(url, dataId)}}"
+      headers="{{_computeHeaders(clientId)}}"
+      data="{{data}}" auto>
+    </fetch-element>
+
+  </template>
+
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'get-element',
+
+    properties: {
+      demoUrl: {
+        type: String,
+        value: 'https://api.imgur.com/3/image/'
+      },
+
+      dataId: {
+        type: String,
+        value: 'CqYB5hA'
+      },
+
+      clientId: {
+        type: String
+      }
+    },
+
+    observers: [
+      '_dataChanged(data)'
+    ],
+
+    _computeUrl: function (url, dataId) {
+      if (url && !dataId) {
+        return url;
+      } else if (url && dataId) {
+        return url + '/' + dataId;
+      }
+    },
+
+    _computeHeaders: function (clientId) {
+      if (clientId) {
+        return {"Authorization": "Client-ID " + clientId};
+      }
+    },
+
+    _dataChanged: function (e) {
+      if (e) {
+        this.data = e.data;
+      }
+    }
+
+    // ready: function () {
+    //   this.querySelector('fetch-element').getData();
+    // }
+
+  });
+</script>
