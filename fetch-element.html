@@ -97,11 +97,9 @@ Example:
       this.params = {};
       this.params.headers = this.headers;
 
-      if (this.method) {
+      if (this.method === 'post') {
         this.params.method = this.method;
-        if (this.method === 'post') {
-          this.params.body = this.body;
-        }
+        this.params.body = this.body;
       }
 
       fetch(this.url, this.params)
