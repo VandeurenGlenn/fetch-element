@@ -40,7 +40,10 @@ Example:
       * “cors-with-forced-preflight” will always perform a preflight check before making the actual request.
       * “no-cors” is intended to make requests to other origins that do not have CORS headers and result in an opaque response, but as stated, this isn’t possible in the window global scope at the moment.
       */
-      mode: String,
+      mode: {
+        type: String,
+        value: 'cors'
+      },
 
       /**
       * Set method to 'post' for writing data to JSON.
@@ -94,12 +97,8 @@ Example:
     // Element Behavior
 
     fetch: function () {
-      this.params = {};
+      this.params = {mode: this.mode};
       this.params.headers = this.headers;
-
-      if (this.mode) {
-        this.params.mode = this.mode;
-      }
 
       if (this.method === 'post') {
         this.params.method = this.method;
