@@ -38,6 +38,14 @@ Example:
         type: Object
       },
 
+      /*
+      * “same-origin” only succeeds for requests for assets on the same origin, all other requests will reject.
+      * “cors” will allow requests for assets on the same-origin and other origins which return the appropriate CORs headers.
+      * “cors-with-forced-preflight” will always perform a preflight check before making the actual request.
+      * “no-cors” is intended to make requests to other origins that do not have CORS headers and result in an opaque response, but as stated, this isn’t possible in the window global scope at the moment.
+      */
+      mode: String,
+
       /**
       * Set method to post for writing data to JSON.
       */
@@ -97,6 +105,10 @@ Example:
       this.params = {};
       this.params.headers = this.headers;
 
+      if (this.mode) {
+        this.params.mode = this.mode;
+      }
+      
       if (this.method === 'post') {
         this.params.method = this.method;
         this.params.body = this.body;
