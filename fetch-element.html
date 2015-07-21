@@ -30,13 +30,9 @@ Example:
 
     properties: {
 
-      url: {
-        type: String
-      },
+      url: String,
 
-      headers: {
-        type: Object
-      },
+      headers: Object,
 
       /*
       * “same-origin” only succeeds for requests for assets on the same origin, all other requests will reject.
@@ -47,11 +43,9 @@ Example:
       mode: String,
 
       /**
-      * Set method to post for writing data to JSON.
+      * Set method to 'post' for writing data to JSON.
       */
-      method: {
-        type: String
-      },
+      method: String,
 
       /**
       * the object to add
@@ -61,9 +55,7 @@ Example:
         value: undefined
       },
 
-      type: {
-        type: String
-      },
+      type: String,
 
       data: {
         type: Object,
@@ -108,7 +100,7 @@ Example:
       if (this.mode) {
         this.params.mode = this.mode;
       }
-      
+
       if (this.method === 'post') {
         this.params.method = this.method;
         this.params.body = this.body;
