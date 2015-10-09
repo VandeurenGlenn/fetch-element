@@ -58,11 +58,19 @@ Example:
         value: undefined
       },
 
-      type: String,
+      type: {
+        type: String
+      },
 
       data: {
         type: Object,
         notify: true
+      },
+
+      loading: {
+        type: Boolean,
+        readOnly: true,
+        reflectToAttribute: true
       },
 
       auto: {
@@ -76,6 +84,18 @@ Example:
       },
 
       log: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+      * The function you wanna run in the stream, for resolving data.
+      */
+      streamFunction: {
+        type: Function
+      },
+
+      noProgress: {
         type: Boolean,
         value: false
       }
@@ -112,29 +132,75 @@ Example:
         .catch(this._errorHandler.bind(this));
     },
 
+    stream : function (url, decoder) {
+      fetch(this.url)
+        .then(this._handleProgress.bind(this))
+        .then(this._status.bind(this))
+        // .then(this._handleResponse.bind(this))
+        .then(this._json.bind(this))
+        .then(this._responseData.bind(this))
+      .catch(function(err) {console.log(err.message);});
+    },
+
+    _handleProgress: function (response) {
+      // this.fire('handle-response', response);
+      var reader = response.body.getReader();
+      if (!this.noProgress) {
+        this._checkProgress(reader, response);
+        return this._checkProgress(reader, response);
+      }
+    },
+
+    _checkProgress: function(reader, response) {
+      return reader.read()
+        .then(function(result) {
+          if (!result.done) {
+            this._setLoading(true);
+            this.fire('progress', 'loading');
+
+            return this._checkProgress(reader, response);
+          }
+
+          if (result.done) {
+            this._setLoading(false);
+            this.fire('loaded', response);
+            return response;
+          }
+      }.bind(this));
+    },
+
+    _handleResponse: function (response) {
+      if (this.type) {
+        console.log(response);
+        return Promise.resolve(response[this.type]());
+      }
+      return Promise.resolve(response);
+    },
+
     _status: function (response) {
       if (response.status >= 200 && response.status < 300) {
-        return Promise.resolve(response)
+        return Promise.resolve(response);
       } else {
-        return Promise.reject(new Error(response.statusText))
+        return Promise.reject(new Error(response.statusText));
       }
     },
 
     _json: function (response) {
-      return response.json()
+      return response.json();
     },
 
-    _responseData: function (data) {
-      return this.data = data;
+    _responseData: function (response) {
+      this.fire('response', response);
+      return this.data = response;
     },
 
     _errorHandler: function(error) {
+      var err = error.message?error.message:error;
       if (this.log) {
-        console.log('Request failed', error);
+        console.log('Request failed', err);
       }
-      return this.error = error;;
+      return this.error = err;
     }
-
 
   });
 
