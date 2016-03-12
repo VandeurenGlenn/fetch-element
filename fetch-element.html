@@ -118,6 +118,7 @@ Example:
     },
 
     _responseData: function (data) {
+      this.fire('fetch-succes', data);
       return this.data = data;
     },
 
@@ -125,6 +126,7 @@ Example:
       if (this.log) {
         console.log('Request failed', error);
       }
+      this.fire('fetch-error', error);
       return this.error = error;;
     }
 
