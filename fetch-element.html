@@ -50,6 +50,23 @@ Example:
         type: Object,
         value: undefined
       },
+      
+      /**
+       * The response to provide
+       * 
+       * - clone: Creates a clone of the Response object
+       * - error: Returns a new Object associated with a network error.
+       * - redirect: Creates a new response with a different URL.
+       * - arrayBuffer: Returns a promise that resolves with an ArrayBuffer.
+       * - blob: Returns a promise that resolves with a Blob.
+       * - formData: Returns a promise that resolves with a FormData object.
+       * - json: Returns a promise that resolves with a JSON object.
+       * - text: Returns a promise that resolves with a USVString (text).
+       */
+      responses: {
+        type: String,
+        value: 'json'
+      }
 
       type: String,
 
@@ -100,7 +117,7 @@ Example:
 
       fetch(this.url, this.params)
         .then(this._status.bind(this))
-        .then(this._json.bind(this))
+        .then(this._responseHandler.bind(this))
         .then(this._responseData.bind(this))
         .catch(this._errorHandler.bind(this));
     },
@@ -112,9 +129,9 @@ Example:
         return Promise.reject(new Error(response.statusText))
       }
     },
-
-    _json: function (response) {
-      return response.json()
+    
+    _responseHandler: function(response) {
+      return response[this.contentType]();
     },
 
     _responseData: function (data) {
